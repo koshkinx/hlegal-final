@@ -6,9 +6,8 @@ import glob from 'fast-glob'
 import { fileURLToPath } from 'url'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
-// you can use our path for your project
-const rootPath = '/'
-// example: const rootPath = '/my-path/'
+// github pages repo path
+const rootPath = '/hlegal-final/'
 
 export default defineConfig({
 	css: {
@@ -18,6 +17,7 @@ export default defineConfig({
 			}
 		}
 	},
+
 	plugins: [
 		ViteImageOptimizer({
 			svg: {
@@ -29,16 +29,20 @@ export default defineConfig({
 					'sortDefsChildren',
 				],
 			},
+
 			png: {
 				quality: 70,
 			},
+
 			jpeg: {
 				quality: 70,
 			},
+
 			jpg: {
 				quality: 70,
 			},
 		}),
+
 		{
 			...imagemin(['./src/img/**/*.{jpg,png,jpeg}'], {
 				destination: './src/img/webp/',
@@ -49,15 +53,21 @@ export default defineConfig({
 			apply: 'serve',
 		}
 	],
+
 	build: {
 		rollupOptions: {
 			input: Object.fromEntries(
 				glob.sync(['./*.html', './pages/**/*.html']).map(file => [
-					path.relative(__dirname, file.slice(0, file.length - path.extname(file).length)),
+					path.relative(
+						__dirname,
+						file.slice(0, file.length - path.extname(file).length)
+					),
+
 					fileURLToPath(new URL(file, import.meta.url))
 				])
 			)
 		},
 	},
-	base: `${rootPath}`,
+
+	base: rootPath,
 })
